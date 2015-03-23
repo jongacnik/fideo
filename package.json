@@ -1,0 +1,34 @@
+{
+  "name": "fideo",
+  "version": "0.1.0",
+  "description": "Frame video player (or sprite sheet player)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amongiants/fideo"
+  },
+  "main": "fideo.js",
+  "dependencies": {
+    "animate": "0.0.5",
+    "extend": "^2.0.0",
+    "mbl": "^1.0.1",
+    "sanitize-elements": "^0.1.2",
+    "tiny-emitter": "^1.0.0"
+  },
+  "keywords": [
+    "elements",
+    "dom",
+    "node",
+    "array",
+    "check"
+  ],
+  "author": "Jon Gacnik <jon@folderstudio.com> (http://jongacnik.com/)",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-dist": "browserify fideo.js --s fideo > dist/fideo.bundled.js"
+  },
+  "bugs": {
+    "url": "https://github.com/amongiants/fideo/issues"
+  },
+  "homepage": "https://github.com/amongiants/fideo"
+}
