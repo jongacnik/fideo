@@ -6,6 +6,10 @@ var mbl      = require('mbl')
 
 module.exports = function($element, opts) {
 
+  /**
+   * Preliminaries...
+   */
+
   var events = new Emitter()
 
   var options = extend(true, {
@@ -14,7 +18,7 @@ module.exports = function($element, opts) {
     'length' : 5,
     'loop' : false,
     'autoplay' : false
-  }, opts)
+  }, opts) // <- extend defaults with options passed in
 
   var _data = {
     'loop' : null,
@@ -29,31 +33,49 @@ module.exports = function($element, opts) {
 
   // Sanitize element
   if ($element = sanitize($element, true)) {
-    $element = $element[0] // only pass one element to function
+    $element = $element[0] // only pass one element to fideo
   } else {
     console.error('Please pass an element!')
     return
   }
 
-  // Gather options
-  options.columns   = $element.getAttribute('data-fideo-columns') || options.columns
-  options.framerate = $element.getAttribute('data-fideo-framerate') || options.framerate
-  options.length    = $element.getAttribute('data-fideo-length') || options.length
-  options.loop      = $element.hasAttribute('data-fideo-loop') || options.loop
-  options.autoplay  = $element.hasAttribute('data-fideo-autoplay') || options.autoplay
+  // Extend options with those from data-attributes
+  var furtherExtendOptions = function() {
 
-  // Check options
+    // data-fideo-[option] options
+    options.columns   = $element.getAttribute('data-fideo-columns') || options.columns
+    options.framerate = $element.getAttribute('data-fideo-framerate') || options.framerate
+    options.length    = $element.getAttribute('data-fideo-length') || options.length
+    options.loop      = $element.hasAttribute('data-fideo-loop') || options.loop
+    options.autoplay  = $element.hasAttribute('data-fideo-autoplay') || options.autoplay
+
+    // data-fideo-setup options
+    var setup
+    if (setup = $element.getAttribute('data-fideo-setup')) {
+      try {
+        setup = JSON.parse(setup)
+        options = extend(true, options, setup)
+      } catch (error) {
+        console.warn('Error with data-fideo-setup JSON formatting. Ignoring these options.')
+      }
+    }
+
+  }() // <- execute
+
+  // Quality control...
   if (!options.columns || !options.framerate || !options.length) {
-    console.error('Please make sure you\'ve defined number of columns, framerate, and animation length!')
+    console.error('Make sure you\'ve defined number of columns, framerate, and animation length!')
     return
   }
 
   if (!$element.getAttribute('data-fideo')) {
-    console.error('Hey you need a frame sheet!')
+    console.error('Hey you need a frame sheet src!')
     return
   }
 
-  // All's good...
+  /**
+   * Whew, we can fideo!
+   */
 
   var init = function() {
 
@@ -74,7 +96,7 @@ module.exports = function($element, opts) {
     var videoLoad = mbl($element, {
       'sourceAttr' : 'data-fideo',
       'bgMode' : true,
-      'complete' : loaded
+      'complete' : loaded // <- run loaded method once framesheet loads
     })
     videoLoad.start()
 
@@ -111,11 +133,7 @@ module.exports = function($element, opts) {
     }
 
     // Emit progress
-    _data.progress = progress()
-    events.emit('progress', {
-      'element'  : $element,
-      'progress' : _data.progress
-    })
+    progress()
 
   }
 
@@ -162,6 +180,14 @@ module.exports = function($element, opts) {
   }
 
   var progress = function() {
+    _data.progress = getProgress()
+    events.emit('progress', {
+      'element'  : $element,
+      'progress' : _data.progress
+    })
+  }
+
+  var getProgress = function() {
     return _data.currentFrame / _data.totalFrame
   }
 
@@ -170,13 +196,17 @@ module.exports = function($element, opts) {
     pause()
   }
 
-  init()
+  init() // <- init!
   
+  /**
+   * Public methods
+   */
+
   return {
     'play' : play,
     'pause' : pause,
     'rewind' : rewind,
-    'progress' : progress,
+    'getProgress' : getProgress,
     'next' : next,
     'destroy' : destroy,
     'element' : $element,
