@@ -25,7 +25,7 @@
   "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-dist": "browserify fideo.js --s fideo > dist/fideo.bundled.js"
+    "build-dist": "browserify -g uglifyify fideo.js --s fideo > dist/fideo.bundled.js"
   },
   "bugs": {
     "url": "https://github.com/amongiants/fideo/issues"

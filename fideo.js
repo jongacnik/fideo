@@ -17,8 +17,7 @@ module.exports = function($element, opts) {
   }, opts)
 
   var _data = {
-    'loop'   : null,
-    'image'  : null,
+    'loop' : null,
     'progress' : 0,
     'totalFrame' : 0,
     'totalRow' : 0,
@@ -28,17 +27,33 @@ module.exports = function($element, opts) {
     'currentRow' : 0,
   }
 
-  if (!options.columns || !options.framerate || !options.length) {
-    console.error('Please check your options for number of columns, framerate, and animation length')
-    return
-  }
-
+  // Sanitize element
   if ($element = sanitize($element, true)) {
     $element = $element[0] // only pass one element to function
   } else {
-    console.error('Please pass an element')
+    console.error('Please pass an element!')
     return
   }
+
+  // Gather options
+  options.columns   = $element.getAttribute('data-fideo-columns') || options.columns
+  options.framerate = $element.getAttribute('data-fideo-framerate') || options.framerate
+  options.length    = $element.getAttribute('data-fideo-length') || options.length
+  options.loop      = $element.hasAttribute('loop') || options.loop
+  options.autoplay  = $element.hasAttribute('autoplay') || options.autoplay
+
+  // Check options
+  if (!options.columns || !options.framerate || !options.length) {
+    console.error('Please make sure you\'ve defined number of columns, framerate, and animation length!')
+    return
+  }
+
+  if (!$element.getAttribute('data-fideo')) {
+    console.error('Hey you need a frame sheet!')
+    return
+  }
+
+  // All's good...
 
   var init = function() {
 
@@ -48,11 +63,6 @@ module.exports = function($element, opts) {
     _data.totalCol   = options.columns
 
     // Set initial styles
-    _data.image = $element.getAttribute('data-fideo')
-    if (!_data.image) {
-      console.error('Hey you need a frame sheet!')
-      return
-    }
     $element.style.backgroundPosition = '0 0'
     $element.style.backgroundSize = (_data.totalCol * 100) + '% ' + (_data.totalRow * 100) + '%';
 
