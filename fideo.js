@@ -50,8 +50,8 @@ module.exports = function($element, opts) {
     options.autoplay  = $element.hasAttribute('data-fideo-autoplay') || options.autoplay
 
     // data-fideo-setup options
-    var setup
-    if (setup = $element.getAttribute('data-fideo-setup')) {
+    var setup = $element.getAttribute('data-fideo-setup')
+    if (setup) {
       try {
         setup = JSON.parse(setup)
         options = extend(true, options, setup)
