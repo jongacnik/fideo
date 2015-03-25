@@ -39,8 +39,8 @@ module.exports = function($element, opts) {
   options.columns   = $element.getAttribute('data-fideo-columns') || options.columns
   options.framerate = $element.getAttribute('data-fideo-framerate') || options.framerate
   options.length    = $element.getAttribute('data-fideo-length') || options.length
-  options.loop      = $element.hasAttribute('loop') || options.loop
-  options.autoplay  = $element.hasAttribute('autoplay') || options.autoplay
+  options.loop      = $element.hasAttribute('data-fideo-loop') || options.loop
+  options.autoplay  = $element.hasAttribute('data-fideo-autoplay') || options.autoplay
 
   // Check options
   if (!options.columns || !options.framerate || !options.length) {
