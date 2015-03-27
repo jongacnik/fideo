@@ -17,7 +17,8 @@ module.exports = function($element, opts) {
     'framerate' : 24,
     'length' : 5,
     'loop' : false,
-    'autoplay' : false
+    'autoplay' : false,
+    'load' : true
   }, opts) // <- extend defaults with options passed in
 
   var _data = {
@@ -48,6 +49,7 @@ module.exports = function($element, opts) {
     options.length    = $element.getAttribute('data-fideo-length') || options.length
     options.loop      = $element.hasAttribute('data-fideo-loop') || options.loop
     options.autoplay  = $element.hasAttribute('data-fideo-autoplay') || options.autoplay
+    options.load      = $element.hasAttribute('data-fideo-load') || options.load
 
     // data-fideo-setup options
     var setup = $element.getAttribute('data-fideo-setup')
@@ -93,12 +95,14 @@ module.exports = function($element, opts) {
     _data.loop.pause()
 
     // Begin load
-    var videoLoad = mbl($element, {
-      'sourceAttr' : 'data-fideo',
-      'bgMode' : true,
-      'complete' : loaded // <- run loaded method once framesheet loads
-    })
-    videoLoad.start()
+    if (options.load) { // if Fideo should handle loading
+      var videoLoad = mbl($element, {
+        'sourceAttr' : 'data-fideo',
+        'bgMode' : true,
+        'complete' : loaded // <- run loaded method once framesheet loads
+      })
+      videoLoad.start()
+    }
 
     // Emit ready, ew yucky timeout hack
     setTimeout(function() {
