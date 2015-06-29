@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Fideo</title>
+  <style>
+    [data-fideo] {
+      width: 380px;
+    }
+    [data-fideo]:before {
+      content: "";
+      display: block;
+      padding-top: 56.25%;
+    }
+  </style>
+</head>
+<body>
+
+<div
+  data-fideo="wave1-frame-30.svg"
+  data-fideo-setup='{"columns":10,"framerate":30,"frames":30,"autoplay":true,"loop":true}'
+></div>
+
+<br>
+
+<button data-play>Play</button>
+<button data-pause>Pause</button>
+<button data-rewind>Rewind</button>
+<button data-next>Next</button>
+
+<script src="../dist/fideo.bundled.js"></script>
+<script>
+  // init fideo
+  var video = fideo(document.querySelector('[data-fideo]'))
+
+  // buttons
+  document.querySelector('[data-play]').addEventListener('click', video.play)
+  document.querySelector('[data-pause]').addEventListener('click', video.pause)
+  document.querySelector('[data-rewind]').addEventListener('click', video.rewind)
+  document.querySelector('[data-next]').addEventListener('click', video.next)
+</script>
+</body>
+</html>

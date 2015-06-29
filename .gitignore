@@ -1,7 +1,5 @@
 # Combo of gitignore thingies
 
-test/
-
 # Logs
 logs
 *.log
@@ -56,7 +54,7 @@ node_modules
 *.sql
 *.sqlite
 
-# OS generated files 
+# OS generated files
 .DS_Store
 .DS_Store?
 ._*
