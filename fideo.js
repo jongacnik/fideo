@@ -15,7 +15,7 @@ module.exports = function($element, opts) {
   var options = extend(true, {
     'columns' : 12,
     'framerate' : 24,
-    'length' : 5,
+    'frames' : 24,
     'loop' : false,
     'autoplay' : false,
     'load' : true
@@ -46,7 +46,7 @@ module.exports = function($element, opts) {
     // data-fideo-[option] options
     options.columns   = $element.getAttribute('data-fideo-columns') || options.columns
     options.framerate = $element.getAttribute('data-fideo-framerate') || options.framerate
-    options.length    = $element.getAttribute('data-fideo-length') || options.length
+    options.frames    = $element.getAttribute('data-fideo-frames') || options.frames
     options.loop      = $element.hasAttribute('data-fideo-loop') || options.loop
     options.autoplay  = $element.hasAttribute('data-fideo-autoplay') || options.autoplay
     options.load      = $element.hasAttribute('data-fideo-load') || options.load
@@ -65,8 +65,8 @@ module.exports = function($element, opts) {
   }() // <- execute
 
   // Quality control...
-  if (!options.columns || !options.framerate || !options.length) {
-    console.error('Make sure you\'ve defined number of columns, framerate, and animation length!')
+  if (!options.columns || !options.framerate || !options.frames) {
+    console.error('Make sure you\'ve defined number of columns, framerate, and total frames!')
     return
   }
 
@@ -82,8 +82,8 @@ module.exports = function($element, opts) {
   var init = function() {
 
     // Interpret details
-    _data.totalFrame = options.framerate * options.length
-    _data.totalRow   = _data.totalFrame / options.columns
+    _data.totalFrame = options.frames
+    _data.totalRow   = Math.ceil(_data.totalFrame / options.columns)
     _data.totalCol   = options.columns
 
     // Set initial styles
@@ -121,7 +121,7 @@ module.exports = function($element, opts) {
 
     // Set styles
     $element.style.backgroundPosition = xPos + '% ' + yPos + '%'
-   
+
     // Update data
     _data.currentRow = _data.currentFrame % _data.totalCol == 0 ? _data.currentRow + 1 : _data.currentRow
     _data.currentCol = _data.currentFrame % _data.totalCol
@@ -201,7 +201,7 @@ module.exports = function($element, opts) {
   }
 
   init() // <- init!
-  
+
   /**
    * Public methods
    */
