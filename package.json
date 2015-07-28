@@ -10,7 +10,7 @@
   "dependencies": {
     "animate": "0.0.5",
     "extend": "^2.0.0",
-    "mbl": "^1.0.1",
+    "mbl": "^1.0.4",
     "sanitize-elements": "^0.1.2",
     "tiny-emitter": "^1.0.0"
   },
