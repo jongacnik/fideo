@@ -27,6 +27,8 @@ module.exports = function($element, opts) {
     'totalFrame' : 0,
     'totalRow' : 0,
     'totalCol' : 0,
+    'xShift' : 0,
+    'yShift' : 0,
     'currentFrame' : 1,
     'currentCol' : 0,
     'currentRow' : 0,
@@ -85,6 +87,8 @@ module.exports = function($element, opts) {
     _data.totalFrame = options.frames
     _data.totalRow   = Math.ceil(_data.totalFrame / options.columns)
     _data.totalCol   = options.columns
+    _data.xShift     = 100 / (_data.totalCol - 1)
+    _data.yShift     = 100 / (_data.totalRow - 1)
 
     // Set initial styles
     $element.style.backgroundPosition = '0 0'
@@ -116,8 +120,8 @@ module.exports = function($element, opts) {
   var next = function() {
 
     // Get background xPos and yPos
-    var xPos = -100 * _data.currentCol
-    var yPos = -100 * _data.currentRow
+    var xPos = _data.xShift * _data.currentCol
+    var yPos = _data.yShift * _data.currentRow
 
     // Set styles
     $element.style.backgroundPosition = xPos + '% ' + yPos + '%'
@@ -143,8 +147,10 @@ module.exports = function($element, opts) {
 
   var loaded = function() {
     if (options.autoplay) _data.loop.resume()
-    events.emit('load', {
-      'element' : $element
+    setTimeout(function() {
+      events.emit('load', {
+        'element' : $element
+      })
     })
   }
 
@@ -214,7 +220,10 @@ module.exports = function($element, opts) {
     'next' : next,
     'destroy' : destroy,
     'element' : $element,
-    'on' : function(ev, cb){ events.on(ev, cb) }
+    'on' : function(ev, cb) {
+      events.on(ev, cb)
+      return this
+    }
   }
 
 }
